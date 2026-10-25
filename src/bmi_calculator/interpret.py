@@ -1,7 +1,4 @@
-
 from validate import validate_positive
-
-
 def interpret_bmi(bmi: float) -> str:
 
     value = validate_positive(bmi, "ІМТ")
