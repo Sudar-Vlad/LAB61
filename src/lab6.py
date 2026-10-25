@@ -1,36 +1,36 @@
-"""
-Основна програма для Лабораторної роботи № 6.
 
-Цей скрипт повинен імпортувати та використовувати створений вами пакет,
-щонайменше один модуль зі стандартної бібліотеки Python,
-та щонайменше один сторонній пакет.
-"""
-
-# Приклад імпорту зі стандартної бібліотеки
-import math
-
-# Приклад імпорту стороннього пакета
-import requests
-
-# TODO: Імпортуйте функції зі створеного вами пакета.
-# from назва_вашого_пакета.назва_модуля import ваша_функція
+from bmi_calculator import calculate_bmi, interpret_bmi
+from validate import cm_to_m, validate_positive
 
 
-def main():
-    """Основна функція для демонстрації використання модулів та пакетів."""
-    # Приклад використання модуля стандартної бібліотеки
-    print(f"Квадратний корінь з 16: {math.sqrt(16)}")
+def main() -> None:
+    """Отримати дані користувача та вивести ІМТ і його категорію."""
+    init(autoreset=True)
 
-    # Приклад використання стороннього пакета
+    print("Калькулятор ІМТ для дорослих")
+    print("Результат не є медичним діагнозом.\n")
+
     try:
-        response = requests.get("https://api.github.com", timeout=10)
-        response.raise_for_status()  # Викликати виняток для невдалих статус-кодів
-        print("Успішно підключено до GitHub API.")
-    except requests.exceptions.RequestException as e:
-        print(f"Не вдалося підключитися до GitHub API: {e}")
+        weight = validate_positive(
+            input("Введіть масу тіла в кг: ").replace(",", "."),
+            "Маса",
+        )
 
-    # TODO: Додайте виклики ваших власних функцій з вашого пакета.
-    # print(f"Результат моєї функції: {ваша_функція(якісь_вхідні_дані)}")
+        height_cm = validate_positive(
+            input("Введіть зріст у см: ").replace(",", "."),
+            "Зріст",
+        )
+
+        height_m = cm_to_m(height_cm)
+        bmi = calculate_bmi(weight, height_m)
+        category = interpret_bmi(bmi)
+
+
+        print(f"\nВаш ІМТ: {bmi:.2f}")
+        print( f"Категорія: {category}" )
+
+    except ValueError as error:
+        print(Fore.RED + f"Помилка: {error}")
 
 
 if __name__ == "__main__":
